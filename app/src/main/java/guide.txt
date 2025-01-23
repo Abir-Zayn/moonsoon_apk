@@ -1,0 +1,5 @@
+Kotlin Coroutines
+
+Kotlin Coroutines are a way to write asynchronous, non-blocking code in a simple and readable way.
+They allow you to perform tasks like network requests,
+file I/O, or database queries without freezing the main thread, ensuring smooth performance in your app.
