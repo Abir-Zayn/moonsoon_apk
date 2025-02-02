@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,11 +8,23 @@ plugins {
     id("kotlin-kapt")
 }
 
+//read an API key (or any other configuration value)
+// from a local.properties file.
+// This is a common practice in Android development to keep sensitive information,
+// such as API keys, out of version control (like Git) and to allow different configurations for different environments (e.g., development, staging, production).
+val localProperties = File(rootProject.rootDir, "local.properties").reader().use {
+    Properties().apply { load(it) }
+}
+
+val apiKey = localProperties.getProperty("API_KEY", "")
+
 android {
     namespace = "com.example.moonsoon"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
+
+        buildConfigField("String", "API_KEY", "\"$apiKey\"")
         applicationId = "com.example.moonsoon"
         minSdk = 28
         targetSdk = 34
@@ -38,6 +52,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig =true
     }
 }
 
