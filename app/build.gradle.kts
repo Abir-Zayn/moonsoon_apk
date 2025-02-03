@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
 
-        buildConfigField("String", "API_KEY", "\"$apiKey\"")
+        buildConfigField("String", "API_KEY", "\"cec4284df30107f7db0319027c74b1d1\"")
         applicationId = "com.example.moonsoon"
         minSdk = 28
         targetSdk = 34
@@ -63,6 +63,9 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
 
+    //Navigation
+    implementation(libs.androidx.navigation.compose)
+
     // Compose dependencies
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
@@ -90,9 +93,9 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // Dagger Hilt
-    implementation("com.google.dagger:hilt-android:2.48")
-    kapt("com.google.dagger:hilt-android-compiler:2.48")
-    kapt("androidx.hilt:hilt-compiler:1.1.0")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    kapt(libs.androidx.hilt.compiler)
 
     // Testing dependencies
     testImplementation(libs.junit)
