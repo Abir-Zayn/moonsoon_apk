@@ -30,9 +30,7 @@ class MainActivity : ComponentActivity() {
                 }
                 }
             }
-
     }
-
 
 @Composable
 fun AppEntryPoint(){

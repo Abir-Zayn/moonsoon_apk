@@ -46,6 +46,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
@@ -53,6 +54,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.moonsoon.data.entity.WeatherResponse
 import com.example.moonsoon.data.resource.ResourceState
 import com.example.moonsoon.ui.ViewModel.WeatherViewModel
+import kotlin.math.roundToInt
 
 
 @Composable
@@ -75,23 +77,29 @@ fun WeatherContent(weather: WeatherResponse){
 fun WeatherMainCard(weather: WeatherResponse){
 
     //Weather Main Card Background
-    Surface( modifier = Modifier.fillMaxWidth()
-            .clip(RoundedCornerShape(24.dp)),
-            color = MaterialTheme.colorScheme.primaryContainer,
-            tonalElevation = 4.dp
-    ) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .shadow(8.dp, shape = RoundedCornerShape(16.dp)),
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+    )  {
 
         //Weather Main Card Content
             Column (
                 modifier = Modifier.padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ){
+
                 WeatherIcon(weather.weather.firstOrNull()?.main?:"Clear")
                     Spacer(modifier = Modifier.height(16.dp))
 
-                Text( text ="${weather.main.temp.toInt()}°C",
+                Text( text ="${weather.main.temp}°C",
                     style = MaterialTheme.typography.displayLarge,
-                    color = MaterialTheme.colorScheme.primaryContainer)
+                    color = MaterialTheme.colorScheme.onPrimaryContainer)
 
                 Text(
                     text = weather.weather.firstOrNull()?.description?:"",
@@ -104,9 +112,16 @@ fun WeatherMainCard(weather: WeatherResponse){
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ){
-                        TemperatureInfo(label = "Feels Like", value = "${weather.main.feelsLike.toInt()}°C")
-                        TemperatureInfo(label = "Low", value = "${weather.main.tempMin.toInt()}°C")
-                        TemperatureInfo(label = "High", value = "${weather.main.tempMax.toInt()}°C")
+                       TemperatureInfo(
+                            label = "Min",
+                            value = "${weather.main.tempMin}°C",
+                            icon = Icons.Outlined.Warning
+                          )
+                            TemperatureInfo(
+                             label = "Max",
+                             value = "${weather.main.tempMax.roundToInt()}°C",
+                             icon = Icons.Outlined.Warning
+                       )
 
                     }
 
@@ -164,19 +179,25 @@ fun WeatherIcon(weather_condition: String){
 }
 
 @Composable
-fun TemperatureInfo(label: String, value:String){
+fun TemperatureInfo(label: String, value:String, icon:ImageVector){
     Column (
+        verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
+        Icon(
+            imageVector = icon,
+            contentDescription = label,
+            modifier = Modifier.size(24.dp),
+            tint = MaterialTheme.colorScheme.secondary
         )
         Text(
             text = label,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)
+            style = MaterialTheme.typography.labelMedium
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
@@ -225,13 +246,17 @@ fun WeatherDetailedCard(
 }
 
 @Composable
-fun SearchBar(value: String, onValueChange:(String)->Unit){
-    var interactionSource = remember { MutableInteractionSource() }
+fun SearchBar(
+    value: String,
+    onValueChange:(String)->Unit,
+    modifier: Modifier = Modifier,
+    placeholder: String ="Search City"
+    ){
+    val interactionSource = remember { MutableInteractionSource() }
 
     Surface(
         modifier = Modifier.fillMaxWidth() .clip(RoundedCornerShape(16.dp)),
-        color = MaterialTheme.colorScheme.secondaryContainer,
-        tonalElevation = 2.dp
+
     ) {
         OutlinedTextField(
             value = value,
@@ -249,10 +274,7 @@ fun SearchBar(value: String, onValueChange:(String)->Unit){
             interactionSource = interactionSource,
             modifier = Modifier.padding(16.dp) .fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                unfocusedBorderColor = MaterialTheme.colorScheme.onSecondaryContainer
-            ),
+
         )
 
     }
@@ -300,6 +322,8 @@ fun ErrorView(message:String){
     }
 }
 
+
+
 @Composable
 fun WeatherScreen(
     viewModel : WeatherViewModel = hiltViewModel()
@@ -310,7 +334,7 @@ fun WeatherScreen(
 
     Box(
         modifier = Modifier.fillMaxSize()
-            .padding(16.dp)
+
             .background(brush = Brush.verticalGradient(
                 colors = listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.outline)
             ))

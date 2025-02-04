@@ -1,6 +1,8 @@
 [versions]
 agp = "8.7.0"
 androidsvgAar = "1.4"
+animation = " 1.0.0"
+animationGraphics = "1.7.7"
 converterGson = "2.9.0"
 hiltAndroidGradlePlugin = "2.48"
 hiltCompiler = "1.2.0"
@@ -18,6 +20,8 @@ navigationCompose = "2.8.6"
 
 [libraries]
 androidsvg-aar = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvgAar" }
+androidx-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
+androidx-animation-graphics = { module = "androidx.compose.animation:animation-graphics", version.ref = "animationGraphics" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltCompiler" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }

@@ -18,23 +18,25 @@ import javax.inject.Inject
 //related data in a lifecycle conscious way. using HiltViewModel, you can easily inject dependencies into your ViewModel without having to
 //manually create instances .For eg HiltViewModel will be responsible of UI changes of city.
 @HiltViewModel
-class WeatherViewModel @Inject constructor(private val weatherRepo: WeatherRepository): ViewModel() {
-    private var _weatherState = MutableStateFlow<ResourceState<WeatherResponse>>(ResourceState.Loading())
-    var weatherState : StateFlow<ResourceState<WeatherResponse>> = _weatherState.asStateFlow()
+class WeatherViewModel @Inject constructor(private val weatherRepo: WeatherRepository) :
+    ViewModel() {
+    private var _weatherState =
+        MutableStateFlow<ResourceState<WeatherResponse>>(ResourceState.Loading())
+    var weatherState: StateFlow<ResourceState<WeatherResponse>> = _weatherState.asStateFlow()
 
-     val _cityName = MutableStateFlow<String>("Dhaka") //By default, we are showing the weather of Dhaka
-     val cityName : StateFlow<String> = _cityName.asStateFlow()
+    val _cityName =
+        MutableStateFlow<String>("Dhaka") //By default, we are showing the weather of Dhaka
+    val cityName: StateFlow<String> = _cityName.asStateFlow()
 
-     init {
-         getWeather()
-     }
-
+    init {
+        getWeather()
+    }
 
 
     fun getWeather() {
         viewModelScope.launch {
             weatherRepo.getWeather(cityName.value).collectLatest {
-                _weatherState.value  =it
+                _weatherState.value = it
             }
         }
     }

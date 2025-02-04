@@ -57,6 +57,13 @@ android {
 }
 
 dependencies {
+
+    // Core Compose Animation
+    implementation (libs.androidx.animation)
+
+    // Optional: Compose Animation Graphics
+    implementation (libs.androidx.animation.graphics)
+
     // Core Android dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
